@@ -12,17 +12,20 @@ type Props = {
   children: React.ReactNode
 }
 
-type ExpenseActions = {
-  type: "ADD" | "UPDATE" | "DELETE"
-  payload: ExpenseInputs | string
-}
+type Action =
+  | { type: "ADD"; payload: ExpenseInputs }
+  | {
+      type: "UPDATE"
+      payload: { id: string; title: string; amount: number; date: Date }
+    }
+  | { type: "DELETE"; payload: { id: string } }
 
-type ExpensesState = {
+type State = {
   expenses: expense[]
 }
 
 const ExpenseContext = createContext({
-  expenses: [],
+  expenses: [] as expense[],
   addExpense: ({}: ExpenseInputs) => {},
   deleteExpense: (id: string) => {},
   updateExpense: (id: string, {}: ExpenseInputs) => {},
@@ -32,11 +35,25 @@ export function useExpenseContext() {
   return useContext(ExpenseContext)
 }
 
-function expensesReducer(state: ExpensesState, action: ExpenseActions) {
+function expensesReducer(state: State, action: Action) {
   switch (action.type) {
     case "ADD":
+      const id = new Date().toString() + Math.random().toString()
+      const newExpense: expense = { id, ...action.payload }
+      return { expenses: [newExpense, ...state.expenses] }
     case "UPDATE":
+      const updatableExpenseIndex = state.expenses.findIndex(
+        (exp) => exp.id === action.payload.id
+      )
+      const updatableExpense = state.expenses[updatableExpenseIndex]
+      const updatedItem = { ...updatableExpense, ...action.payload }
+      const updatedExpenses = [...state.expenses]
+      updatedExpenses[updatableExpenseIndex] = updatedItem
+      return { expenses: updatedExpenses }
     case "DELETE":
+      return {
+        expenses: state.expenses.filter((exp) => exp.id !== action.payload.id),
+      }
     default:
       return state
   }
@@ -53,14 +70,21 @@ export default function ExpensesContextProvider({ children }: Props) {
     dispatch({ type: "ADD", payload: expenseData })
   }
   function deleteExpense(id: string) {
-    dispatch({ type: "DELETE", payload: id })
+    dispatch({ type: "DELETE", payload: { id } })
   }
 
-  function updateExpense(id: string, expenseData: ExpenseInputs) {}
+  function updateExpense(id: string, expenseData: ExpenseInputs) {
+    dispatch({ type: "UPDATE", payload: { id, ...expenseData } })
+  }
 
   return (
     <ExpenseContext.Provider
-      value={{ expenses, addExpense, deleteExpense, updateExpense }}
+      value={{
+        expenses: expensesState.expenses,
+        addExpense,
+        deleteExpense,
+        updateExpense,
+      }}
     >
       {children}
     </ExpenseContext.Provider>

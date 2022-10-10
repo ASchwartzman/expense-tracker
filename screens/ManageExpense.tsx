@@ -7,9 +7,13 @@ import IconButton from "../components/ui/IconButton"
 import { GlobalStyles } from "../constants/styles"
 import Button from "../components/ui/Button"
 
+import { useExpenseContext } from "../store/expenses-context"
+
 type NavProps = NativeStackScreenProps<StackParamList, "ManageExpense">
 
 export default function ManageExpense({ route, navigation }: NavProps) {
+  const { deleteExpense } = useExpenseContext()
+
   const editedExpenseId = route.params?.expenseId
   const isEditing = !!editedExpenseId
 
@@ -20,6 +24,7 @@ export default function ManageExpense({ route, navigation }: NavProps) {
   }, [navigation, isEditing])
 
   function deleteExpenseHandler() {
+    deleteExpense(editedExpenseId)
     navigation.goBack()
   }
 
