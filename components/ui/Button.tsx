@@ -1,23 +1,14 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  GestureResponderEvent,
-  StyleProp,
-  ViewStyle,
-} from "react-native"
 import React from "react"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { GlobalStyles } from "../../constants/styles"
+import { ButtonProps } from "../../types/ReactComponentsTypes"
 
-type Props = {
-  children: React.ReactNode
-  onPress: (event: GestureResponderEvent) => void
-  style?: StyleProp<ViewStyle>
-  mode?: "flat" | null
-}
-
-export default function Button({ children, onPress, mode, style }: Props) {
+export default function Button({
+  children,
+  onPress,
+  mode,
+  style,
+}: ButtonProps) {
   return (
     <View style={style}>
       <Pressable

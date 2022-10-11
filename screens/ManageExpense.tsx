@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from "react-native"
 import React, { useLayoutEffect } from "react"
+import { StyleSheet, View } from "react-native"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { StackParamList } from "../routes/MainStack"
+import Button from "../components/ui/Button"
 import IconButton from "../components/ui/IconButton"
 import { GlobalStyles } from "../constants/styles"
-import Button from "../components/ui/Button"
+import { StackParamList } from "../types/ReactComponentsTypes"
 
 import { useExpenseContext } from "../store/expenses-context"
 

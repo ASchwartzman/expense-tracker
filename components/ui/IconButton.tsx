@@ -1,20 +1,14 @@
-import {
-  Pressable,
-  GestureResponderEvent,
-  StyleSheet,
-  View,
-} from "react-native"
-import React from "react"
 import { Ionicons } from "@expo/vector-icons"
+import React from "react"
+import { Pressable, StyleSheet, View } from "react-native"
+import { IconButtonProps } from "../../types/ReactComponentsTypes"
 
-type Props = {
-  iconName: keyof typeof Ionicons.glyphMap
-  size: number
-  color: string
-  onPress: (event: GestureResponderEvent) => void
-}
-
-export default function IconButton({ iconName, size, color, onPress }: Props) {
+export default function IconButton({
+  iconName,
+  size,
+  color,
+  onPress,
+}: IconButtonProps) {
   return (
     <Pressable
       onPress={onPress}

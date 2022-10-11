@@ -4,10 +4,7 @@ import BottomTabsStack from "./BottomTabs"
 import ManageExpenseScreen from "../screens/ManageExpense"
 import { GlobalStyles } from "../constants/styles"
 
-export type StackParamList = {
-  ManageExpense: { expenseId: string | null }
-  BottomTabStack: undefined
-}
+import { StackParamList } from "../types/ReactComponentsTypes"
 
 const Stack = createNativeStackNavigator<StackParamList>()
 

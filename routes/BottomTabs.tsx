@@ -1,17 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-import RecentExpensesScreen from "../screens/RecentExpensesScreen"
 import AllExpensesScreen from "../screens/AllExpensesScreen"
+import RecentExpensesScreen from "../screens/RecentExpensesScreen"
 
 import { Ionicons } from "@expo/vector-icons"
 
-import { GlobalStyles } from "../constants/styles"
 import IconButton from "../components/ui/IconButton"
+import { GlobalStyles } from "../constants/styles"
 
-export type BottomTabsParamList = {
-  AllExpenses: undefined
-  RecentExpenses: undefined
-}
+import { BottomTabsParamList } from "../types/ReactComponentsTypes"
 
 const Tabs = createBottomTabNavigator<BottomTabsParamList>()
 

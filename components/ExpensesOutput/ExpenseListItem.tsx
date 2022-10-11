@@ -7,16 +7,13 @@ import { getFormattedDate } from "../../utils/date"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 
-import { StackParamList } from "../../routes/MainStack"
-
-type Props = {
-  item: expense
-}
+import { StackParamList } from "../../types/ReactComponentsTypes"
+import { ExpenseListItemProps } from "../../types/ReactComponentsTypes"
 
 type NavProps = NativeStackScreenProps<StackParamList, "ManageExpense">
 type ManageExpenseScreenNavigationProp = NavProps["navigation"]
 
-export default function ExpenseListItem({ item }: Props) {
+export default function ExpenseListItem({ item }: ExpenseListItemProps) {
   const { title, amount, date } = item
 
   const navigation = useNavigation<ManageExpenseScreenNavigationProp>()

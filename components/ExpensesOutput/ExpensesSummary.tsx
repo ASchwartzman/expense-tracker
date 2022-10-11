@@ -3,13 +3,12 @@ import React from "react"
 
 import { expense } from "../../model/expense"
 import { GlobalStyles } from "../../constants/styles"
+import { ExpenseSummaryProps } from "../../types/ReactComponentsTypes"
 
-type Props = {
-  periodName: string
-  expenses: expense[]
-}
-
-export default function ExpensesSummary({ expenses, periodName }: Props) {
+export default function ExpensesSummary({
+  expenses,
+  periodName,
+}: ExpenseSummaryProps) {
   const expensesSum = expenses.reduce((acc, expense) => {
     return acc + expense.amount
   }, 0)

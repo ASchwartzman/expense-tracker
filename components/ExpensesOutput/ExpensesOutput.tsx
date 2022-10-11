@@ -2,20 +2,15 @@ import React from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { GlobalStyles } from "../../constants/styles"
 import { expense } from "../../model/expense"
+import { ExpenseOutputProps } from "../../types/ReactComponentsTypes"
 import ExpensesList from "./ExpensesList"
 import ExpensesSummary from "./ExpensesSummary"
-
-type Props = {
-  expenses?: expense[]
-  periodName: string
-  fallbackText?: string
-}
 
 export default function ExpensesOutput({
   expenses,
   periodName,
   fallbackText,
-}: Props) {
+}: ExpenseOutputProps) {
   let content = <Text style={styles.infoText}>{fallbackText}</Text>
 
   if (expenses.length > 0) {

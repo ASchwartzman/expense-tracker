@@ -2,13 +2,10 @@ import React from "react"
 import { FlatList, StyleSheet, Text, View } from "react-native"
 
 import { expense } from "../../model/expense"
+import { ExpenseListProps } from "../../types/ReactComponentsTypes"
 import ExpenseListItem from "./ExpenseListItem"
 
-type Props = {
-  expenses: expense[]
-}
-
-export default function ExpensesList({ expenses }: Props) {
+export default function ExpensesList({ expenses }: ExpenseListProps) {
   function renderExpenseItem(item: expense) {
     return <ExpenseListItem item={item} />
   }
