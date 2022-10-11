@@ -7,7 +7,13 @@ import { useExpenseContext } from "../store/expenses-context"
 export default function AllExpensesScreen() {
   const { expenses } = useExpenseContext()
 
-  return <ExpensesOutput periodName="Total" expenses={expenses} />
+  return (
+    <ExpensesOutput
+      periodName="Total"
+      expenses={expenses}
+      fallbackText="No registered expenses found"
+    />
+  )
 }
 
 const styles = StyleSheet.create({})

@@ -1,5 +1,5 @@
 import React from "react"
-import { FlatList, StyleSheet } from "react-native"
+import { FlatList, StyleSheet, Text, View } from "react-native"
 
 import { expense } from "../../model/expense"
 import ExpenseListItem from "./ExpenseListItem"
@@ -23,4 +23,13 @@ export default function ExpensesList({ expenses }: Props) {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 24,
+  },
+})

@@ -114,13 +114,13 @@ const DUMMY_EXPENSES: expense[] = [
     id: "e4",
     title: "Book",
     amount: 49.99,
-    date: new Date("2022-06-15"),
+    date: new Date("2022-10-05"),
   },
   {
     id: "e5",
     title: "Another Book",
     amount: 18.59,
-    date: new Date("2022-10-04"),
+    date: new Date("2022-10-10"),
   },
   {
     id: "e6",

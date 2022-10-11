@@ -12,7 +12,7 @@ import { useExpenseContext } from "../store/expenses-context"
 type NavProps = NativeStackScreenProps<StackParamList, "ManageExpense">
 
 export default function ManageExpense({ route, navigation }: NavProps) {
-  const { deleteExpense } = useExpenseContext()
+  const { deleteExpense, addExpense, updateExpense } = useExpenseContext()
 
   const editedExpenseId = route.params?.expenseId
   const isEditing = !!editedExpenseId
@@ -28,11 +28,24 @@ export default function ManageExpense({ route, navigation }: NavProps) {
     navigation.goBack()
   }
 
-  function cancelHandler() {
+  function confirmHandler() {
+    if (isEditing) {
+      updateExpense(editedExpenseId, {
+        amount: 29.99,
+        date: new Date(),
+        title: "Updated expense",
+      })
+    } else {
+      addExpense({
+        amount: 19.99,
+        date: new Date("1989-04-22"),
+        title: "Added expense",
+      })
+    }
     navigation.goBack()
   }
 
-  function confirmHandler() {
+  function cancelHandler() {
     navigation.goBack()
   }
 
