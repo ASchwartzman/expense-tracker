@@ -8,7 +8,8 @@ type Props = {
 }
 
 type Action =
-  | { type: "ADD"; payload: ExpenseInputs }
+  | { type: "ADD"; payload: expense }
+  | { type: "SET"; payload: expense[] }
   | {
       type: "UPDATE"
       payload: { id: string; title: string; amount: number; date: Date }
@@ -21,7 +22,8 @@ type State = {
 
 const ExpenseContext = createContext({
   expenses: [] as expense[],
-  addExpense: ({}: ExpenseInputs) => {},
+  addExpense: ({}: expense) => {},
+  setExpenses: (expenses: expense[]) => {},
   deleteExpense: (id: string) => {},
   updateExpense: (id: string, {}: ExpenseInputs) => {},
 })
@@ -33,9 +35,11 @@ export function useExpenseContext() {
 function expensesReducer(state: State, action: Action) {
   switch (action.type) {
     case "ADD":
-      const id = new Date().toString() + Math.random().toString()
-      const newExpense: expense = { id, ...action.payload }
+      const newExpense: expense = { ...action.payload }
       return { expenses: [newExpense, ...state.expenses] }
+    case "SET":
+      const inverted = action.payload.reverse()
+      return { expenses: inverted }
     case "UPDATE":
       const updatableExpenseIndex = state.expenses.findIndex(
         (exp) => exp.id === action.payload.id
@@ -55,15 +59,18 @@ function expensesReducer(state: State, action: Action) {
 }
 
 export default function ExpensesContextProvider({ children }: Props) {
-  const expenses = DUMMY_EXPENSES
-
   const [expensesState, dispatch] = useReducer(expensesReducer, {
-    expenses: DUMMY_EXPENSES,
+    expenses: [],
   })
 
-  function addExpense(expenseData: ExpenseInputs) {
+  function addExpense(expenseData: expense) {
     dispatch({ type: "ADD", payload: expenseData })
   }
+
+  function setExpenses(expenses: expense[]) {
+    dispatch({ type: "SET", payload: expenses })
+  }
+
   function deleteExpense(id: string) {
     dispatch({ type: "DELETE", payload: { id } })
   }
@@ -77,6 +84,7 @@ export default function ExpensesContextProvider({ children }: Props) {
       value={{
         expenses: expensesState.expenses,
         addExpense,
+        setExpenses,
         deleteExpense,
         updateExpense,
       }}
@@ -85,72 +93,3 @@ export default function ExpensesContextProvider({ children }: Props) {
     </ExpenseContext.Provider>
   )
 }
-
-const DUMMY_EXPENSES: expense[] = [
-  {
-    id: "e1",
-    title: "A pair of shoes",
-    amount: 59.99,
-    date: new Date("2022-10-09"),
-  },
-  {
-    id: "e2",
-    title: "A pair of trousers",
-    amount: 89.99,
-    date: new Date("2022-10-07"),
-  },
-  {
-    id: "e3",
-    title: "Some bananas",
-    amount: 9.99,
-    date: new Date("2022-09-08"),
-  },
-  {
-    id: "e4",
-    title: "Book",
-    amount: 49.99,
-    date: new Date("2022-10-05"),
-  },
-  {
-    id: "e5",
-    title: "Another Book",
-    amount: 18.59,
-    date: new Date("2022-10-10"),
-  },
-  {
-    id: "e6",
-    title: "A smartphone",
-    amount: 359.0,
-    date: new Date("2022-06-09"),
-  },
-  {
-    id: "e7",
-    title: "A smartphone",
-    amount: 359.0,
-    date: new Date("2022-06-09"),
-  },
-  {
-    id: "e8",
-    title: "A smartphone",
-    amount: 359.0,
-    date: new Date("2022-06-09"),
-  },
-  {
-    id: "e9",
-    title: "A smartphone",
-    amount: 359.0,
-    date: new Date("2022-06-09"),
-  },
-  {
-    id: "e10",
-    title: "A smartphone",
-    amount: 359.0,
-    date: new Date("2022-06-09"),
-  },
-  {
-    id: "e11",
-    title: "A smartphone",
-    amount: 359.0,
-    date: new Date("2022-06-09"),
-  },
-]

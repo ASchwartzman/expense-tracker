@@ -11,6 +11,7 @@ import { useExpenseContext } from "../store/expenses-context"
 import ExpenseForm from "../components/ManageExpense/ExpenseForm"
 import { getFormattedDate } from "../utils/date"
 import { expense } from "../types/expense"
+import { storeExpense } from "../utils/http"
 
 type NavProps = NativeStackScreenProps<StackParamList, "ManageExpense">
 
@@ -29,11 +30,6 @@ export default function ManageExpense({ route, navigation }: NavProps) {
 
   if (isEditing) {
     editedExpense = expenses.find((expense) => expense.id === editedExpenseId)
-    // initialState = {
-    //   amount: editedExpense.amount.toString(),
-    //   date: getFormattedDate(editedExpense.date),
-    //   title: editedExpense.title,
-    // }
   }
 
   useLayoutEffect(() => {
@@ -47,11 +43,12 @@ export default function ManageExpense({ route, navigation }: NavProps) {
     navigation.goBack()
   }
 
-  function confirmHandler(expense: ExpenseInputs) {
+  async function confirmHandler(expenseData: ExpenseInputs) {
     if (isEditing) {
-      updateExpense(editedExpenseId, expense)
+      updateExpense(editedExpenseId, expenseData)
     } else {
-      addExpense(expense)
+      const id = await storeExpense(expenseData)
+      addExpense({ id, ...expenseData })
     }
     navigation.goBack()
   }
