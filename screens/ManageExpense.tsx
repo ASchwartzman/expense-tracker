@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import { StyleSheet, TextInput, View } from "react-native"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -11,11 +11,19 @@ import { useExpenseContext } from "../store/expenses-context"
 import ExpenseForm from "../components/ManageExpense/ExpenseForm"
 import { getFormattedDate } from "../utils/date"
 import { expense } from "../types/expense"
-import { storeExpense } from "../utils/http"
+import {
+  deleteExpenseBackend,
+  storeExpense,
+  updateExpenseBackend,
+} from "../utils/http"
+import LoadingOverlay from "../components/ui/LoadingOverlay"
+import ErrorOverlay from "../components/ui/ErrorOverlay"
 
 type NavProps = NativeStackScreenProps<StackParamList, "ManageExpense">
 
 export default function ManageExpense({ route, navigation }: NavProps) {
+  const [isSendingData, setIsSendingData] = useState(false)
+  const [error, setError] = useState<string>(null)
   const { expenses, deleteExpense, addExpense, updateExpense } =
     useExpenseContext()
 
@@ -38,23 +46,56 @@ export default function ManageExpense({ route, navigation }: NavProps) {
     })
   }, [navigation, isEditing])
 
-  function deleteExpenseHandler() {
-    deleteExpense(editedExpenseId)
-    navigation.goBack()
+  async function deleteExpenseHandler() {
+    setIsSendingData(true)
+    try {
+      await deleteExpenseBackend(editedExpenseId)
+      deleteExpense(editedExpenseId)
+      navigation.goBack()
+    } catch (error) {
+      setError("Could not delete expense! \n" + error.message)
+    }
+
+    setIsSendingData(false)
   }
 
   async function confirmHandler(expenseData: ExpenseInputs) {
     if (isEditing) {
-      updateExpense(editedExpenseId, expenseData)
+      setIsSendingData(true)
+      try {
+        await updateExpenseBackend(editedExpenseId, expenseData)
+        updateExpense(editedExpenseId, expenseData)
+        navigation.goBack()
+      } catch (error) {
+        setError("Could not update expense! \n" + error.message)
+      }
+      setIsSendingData(false)
     } else {
-      const id = await storeExpense(expenseData)
-      addExpense({ id, ...expenseData })
+      setIsSendingData(true)
+      try {
+        const id = await storeExpense(expenseData)
+        addExpense({ id, ...expenseData })
+        navigation.goBack()
+      } catch (error) {
+        setError("Could not create new expense! \n" + error.message)
+      }
+
+      setIsSendingData(false)
     }
-    navigation.goBack()
   }
 
   function cancelHandler() {
     navigation.goBack()
+  }
+
+  if (isSendingData) {
+    return <LoadingOverlay />
+  }
+
+  if (error && !isSendingData) {
+    return (
+      <ErrorOverlay errorMessage={error} onConfirm={() => setError(null)} />
+    )
   }
 
   return (

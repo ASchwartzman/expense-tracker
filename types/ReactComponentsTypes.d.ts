@@ -68,3 +68,8 @@ export type ExpenseInputs = {
   amount: number
   date: Date
 }
+
+export type ErrorOverlayProps = {
+  errorMessage: string
+  onConfirm: () => void
+}

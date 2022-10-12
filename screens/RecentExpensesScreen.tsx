@@ -7,17 +7,37 @@ import { getDateMinusdays } from "../utils/date"
 import { useExpenseContext } from "../store/expenses-context"
 import { fetchExpenses } from "../utils/http"
 import { expense } from "../types/expense"
+import LoadingOverlay from "../components/ui/LoadingOverlay"
+import ErrorOverlay from "../components/ui/ErrorOverlay"
 
 export default function RecentExpensesScreen() {
   const { expenses, setExpenses } = useExpenseContext()
+  const [isFetching, setIsFetching] = useState(true)
+  const [error, setError] = useState<string>(null)
 
   useEffect(() => {
     async function getExpenses() {
-      const fetchedExpenses = await fetchExpenses()
-      setExpenses(fetchedExpenses)
+      setIsFetching(true)
+      try {
+        const fetchedExpenses = await fetchExpenses()
+        setExpenses(fetchedExpenses)
+      } catch (error) {
+        setError("Could not fetch expenses from backend \n" + error.message)
+      }
+      setIsFetching(false)
     }
     getExpenses()
   }, [])
+
+  if (isFetching) {
+    return <LoadingOverlay />
+  }
+
+  if (error && !isFetching) {
+    return (
+      <ErrorOverlay errorMessage={error} onConfirm={() => setError(null)} />
+    )
+  }
 
   const recentExpenses = expenses.filter((exp) => {
     const today = new Date()

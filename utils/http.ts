@@ -28,3 +28,11 @@ export async function fetchExpenses() {
 
   return expenses
 }
+
+export function updateExpenseBackend(id: string, expenseData: ExpenseInputs) {
+  return axios.put(`${BACKEND_URL}/expenses/${id}.json`, expenseData)
+}
+
+export function deleteExpenseBackend(id: string) {
+  return axios.delete(`${BACKEND_URL}/expenses/${id}.json`)
+}
