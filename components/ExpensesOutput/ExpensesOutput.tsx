@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { GlobalStyles } from "../../constants/styles"
-import { expense } from "../../model/expense"
+import { expense } from "../../types/expense"
 import { ExpenseOutputProps } from "../../types/ReactComponentsTypes"
 import ExpensesList from "./ExpensesList"
 import ExpensesSummary from "./ExpensesSummary"

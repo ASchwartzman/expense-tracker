@@ -1,12 +1,7 @@
 import React, { createContext, useContext, useReducer } from "react"
 
-import { expense } from "../model/expense"
-
-type ExpenseInputs = {
-  title: string
-  amount: number
-  date: Date
-}
+import { expense } from "../types/expense"
+import { ExpenseInputs } from "../types/ReactComponentsTypes"
 
 type Props = {
   children: React.ReactNode

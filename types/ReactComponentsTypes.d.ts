@@ -1,5 +1,10 @@
-import { GestureResponderEvent } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import {
+  GestureResponderEvent,
+  StyleProp,
+  TextInputProps,
+  ViewStyle,
+} from "react-native"
 
 export type BottomTabsParamList = {
   AllExpenses: undefined
@@ -42,4 +47,24 @@ export type ExpenseOutputProps = {
 export type ExpenseSummaryProps = {
   periodName: string
   expenses: expense[]
+}
+
+export type InputProps = {
+  label: string
+  textInputConfig?: TextInputProps
+  style?: StyleProp<ViewStyle>
+  invalid?: boolean
+}
+
+export type ExpenseFormProps = {
+  isEditing: boolean
+  onCancel: () => void
+  onSubmit: (expenseData: ExpenseInputs) => void
+  defaultlValues: expense
+}
+
+export type ExpenseInputs = {
+  title: string
+  amount: number
+  date: Date
 }

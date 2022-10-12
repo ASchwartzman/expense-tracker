@@ -1,21 +1,40 @@
 import React, { useLayoutEffect } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, TextInput, View } from "react-native"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import Button from "../components/ui/Button"
 import IconButton from "../components/ui/IconButton"
 import { GlobalStyles } from "../constants/styles"
-import { StackParamList } from "../types/ReactComponentsTypes"
+import { ExpenseInputs, StackParamList } from "../types/ReactComponentsTypes"
 
 import { useExpenseContext } from "../store/expenses-context"
+import ExpenseForm from "../components/ManageExpense/ExpenseForm"
+import { getFormattedDate } from "../utils/date"
+import { expense } from "../types/expense"
 
 type NavProps = NativeStackScreenProps<StackParamList, "ManageExpense">
 
 export default function ManageExpense({ route, navigation }: NavProps) {
-  const { deleteExpense, addExpense, updateExpense } = useExpenseContext()
+  const { expenses, deleteExpense, addExpense, updateExpense } =
+    useExpenseContext()
 
   const editedExpenseId = route.params?.expenseId
   const isEditing = !!editedExpenseId
+  let initialState = {
+    amount: "",
+    date: getFormattedDate(new Date()),
+    title: "",
+  }
+  let editedExpense = null
+
+  if (isEditing) {
+    editedExpense = expenses.find((expense) => expense.id === editedExpenseId)
+    // initialState = {
+    //   amount: editedExpense.amount.toString(),
+    //   date: getFormattedDate(editedExpense.date),
+    //   title: editedExpense.title,
+    // }
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -28,19 +47,11 @@ export default function ManageExpense({ route, navigation }: NavProps) {
     navigation.goBack()
   }
 
-  function confirmHandler() {
+  function confirmHandler(expense: ExpenseInputs) {
     if (isEditing) {
-      updateExpense(editedExpenseId, {
-        amount: 29.99,
-        date: new Date(),
-        title: "Updated expense",
-      })
+      updateExpense(editedExpenseId, expense)
     } else {
-      addExpense({
-        amount: 19.99,
-        date: new Date("1989-04-22"),
-        title: "Added expense",
-      })
+      addExpense(expense)
     }
     navigation.goBack()
   }
@@ -51,14 +62,12 @@ export default function ManageExpense({ route, navigation }: NavProps) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <Button style={styles.button} onPress={cancelHandler} mode="flat">
-          Cancel
-        </Button>
-        <Button style={styles.button} onPress={confirmHandler}>
-          {isEditing ? "Update" : "Add"}
-        </Button>
-      </View>
+      <ExpenseForm
+        isEditing={isEditing}
+        onCancel={cancelHandler}
+        onSubmit={confirmHandler}
+        defaultlValues={editedExpense}
+      />
 
       {isEditing && (
         <View style={styles.deleteContainer}>
@@ -86,14 +95,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
     alignItems: "center",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignContent: "center",
-  },
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8,
   },
 })

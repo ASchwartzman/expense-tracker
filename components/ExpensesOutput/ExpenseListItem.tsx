@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable } from "react-native"
 import React from "react"
-import { expense } from "../../model/expense"
+import { expense } from "../../types/expense"
 import { GlobalStyles } from "../../constants/styles"
 import { getFormattedDate } from "../../utils/date"
 

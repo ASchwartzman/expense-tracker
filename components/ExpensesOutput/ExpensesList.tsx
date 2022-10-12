@@ -1,7 +1,7 @@
 import React from "react"
 import { FlatList, StyleSheet, Text, View } from "react-native"
 
-import { expense } from "../../model/expense"
+import { expense } from "../../types/expense"
 import { ExpenseListProps } from "../../types/ReactComponentsTypes"
 import ExpenseListItem from "./ExpenseListItem"
 
